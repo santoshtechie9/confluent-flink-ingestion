@@ -1,0 +1,3 @@
+python sttm_codegen_from_template_v2.py \
+  --excel /mnt/data/STTM_v2_template.xlsx \
+  --out-dir ./out

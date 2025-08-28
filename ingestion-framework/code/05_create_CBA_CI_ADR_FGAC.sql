@@ -1,0 +1,14 @@
+CREATE TABLE CBA_CI_ADR_FGAC (
+  CI_ID BIGINT,
+  DOB DATE,
+  ADDR_LINE1 VARCHAR(200),
+  STATE VARCHAR(2),
+  XREF_TYPE VARCHAR(20),
+  CITY VARCHAR(120),
+  ZIP5 VARCHAR(5),
+  COUNTRY VARCHAR(2),
+  EMAIL_LOWER VARCHAR(256),
+  PRIMARY KEY (CI_ID) NOT ENFORCED
+) WITH (
+  -- TODO: connector options here (e.g., 'connector'='jdbc', 'url'='...', 'table-name'='...')
+);
