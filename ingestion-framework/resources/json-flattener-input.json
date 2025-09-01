@@ -1,0 +1,59 @@
+{
+  "type": "ProdEvent",
+  "auditData": {
+    "modifiedBy": "user1",
+    "Timestamp": "2020-04-22 21:34.123"
+  },
+  "entId": {
+    "id": 1002
+  },
+  "SequenceNumber": 405,
+  "product": {
+    "code": "cfi123",
+    "closingOnly": [
+      1,
+      2,
+      3
+    ],
+    "colCusp": {
+      "Cusp": "abc345"
+    },
+    "eqType": "Common",
+    "futureTemplateId": 2,
+    "Id": {
+      "id": 1004
+    },
+    "isPennyTradePrice": false,
+    "Name": "ACC Holdings",
+    "tsf": [
+      {
+        "businessDateAdded": "2018-02-01",
+        "tradeSourceId": [
+          20,
+          30
+        ]
+      },
+      {
+        "businessDateAdded": "2018-02-01",
+        "tradeSourceId": [
+          100,
+          110
+        ]
+      }
+    ],
+    "tsp": [
+      {
+        "businessDateAdded": "2018-02-01",
+        "tradeSourceId": 10
+      },
+      {
+        "businessDateAdded": "2018-02-01",
+        "tradeSourceId": 11
+      },
+      {
+        "businessDateAdded": "2018-02-01",
+        "tradeSourceId": 12
+      }
+    ]
+  }
+}
