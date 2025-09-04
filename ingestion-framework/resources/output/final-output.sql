@@ -95,7 +95,7 @@ end AS cba_ci_createdon,
   when char_length(cba_ci_modifiedon) = 23 and regexp(cba_ci_modifiedon, '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}$')
     then to_timestamp_ltz(cba_ci_modifiedon, 'yyyy-MM-dd hh:mm:ss.SSS')
   when char_length(cba_ci_modifiedon) = 10 and is_decimal(cba_ci_modifiedon)
-    then to_timestamp_ltz(COALESCE(TRY_CAST(cba_ci_modifiedon AS bigint)*1000, 0), 3)
+     to_timestamp_ltz(COALESCE(TRY_CAST(cba_ci_modifiedon AS bigint)*1000, 0), 3)
   when char_length(cba_ci_modifiedon) = 13 and is_decimal(cba_ci_modifiedon)
     then to_timestamp_ltz(COALESCE(TRY_CAST(cba_ci_modifiedon AS bigint), 0), 3)
   else null

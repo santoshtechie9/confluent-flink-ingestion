@@ -1,0 +1,66 @@
+SQL queries: |
+  execute statement set
+  begin
+  INSERT INTO hm_cba_ci (cba_ci_userid, cba_ci_name, cba_ci_createdon, cba_ci_modifiedon)
+  SELECT
+    cba_ci_userid AS cba_ci_userid,
+    cba_ci_name AS cba_ci_name,
+    case
+    when char_length(cba_ci_createdon) = 8 and regexp(cba_ci_createdon, '^\d{8}$')
+      then to_date(cba_ci_createdon, 'yyyyMMdd')
+    when char_length(cba_ci_createdon) = 10 and regexp(cba_ci_createdon, '^\d{4}-\d{2}-\d{2}$')
+      then to_date(cba_ci_createdon, 'yyyy-MM-dd')
+    else null
+  end AS cba_ci_createdon,
+    case
+    when char_length(cba_ci_modifiedon) = 23 and regexp(cba_ci_modifiedon, '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}$')
+      then to_timestamp_ltz(cba_ci_modifiedon, 'yyyy-MM-dd hh:mm:ss.SSS')
+    when char_length(cba_ci_modifiedon) = 10 and is_decimal(cba_ci_modifiedon)
+       to_timestamp_ltz(COALESCE(TRY_CAST(cba_ci_modifiedon AS bigint)*1000, 0), 3)
+    when char_length(cba_ci_modifiedon) = 13 and is_decimal(cba_ci_modifiedon)
+      then to_timestamp_ltz(COALESCE(TRY_CAST(cba_ci_modifiedon AS bigint), 0), 3)
+    else null
+  end AS cba_ci_modifiedon
+  FROM hm_cba_ci_vw;
+  
+  INSERT INTO hm_cba_ci_xref (cba_ci_xref_userid, cba_ci_xref_f2, cba_ci_xref_f3)
+  SELECT
+    cba_ci_xref_userid AS cba_ci_xref_userid,
+    cba_ci_xref_f2 AS cba_ci_xref_f2,
+    cba_ci_xref_f3 AS cba_ci_xref_f3
+  FROM hm_cba_ci_xref_vw;
+  
+  INSERT INTO hm_cba_ci_adr (cba_ci_adr_userid, cba_ci_adr_line, cba_ci_adr_city, cba_ci_adr_state)
+  SELECT
+    cba_ci_adr_userid AS cba_ci_adr_userid,
+    cba_ci_adr_line AS cba_ci_adr_line,
+    cba_ci_adr_city AS cba_ci_adr_city,
+    cba_ci_adr_state AS cba_ci_adr_state
+  FROM hm_cba_ci_adr_vw;
+  
+  INSERT INTO hm_cba_ci_adr_fgac (cba_ci_adr_userid, cba_ci_adr_line, cba_ci_adr_city, cba_ci_adr_state, cba_ci_xref_f2, cba_ci_xref_f3)
+  SELECT
+    hm_cba_ci_adr_vw.cba_ci_adr_userid AS cba_ci_adr_userid,
+    hm_cba_ci_adr_vw.cba_ci_adr_line AS cba_ci_adr_line,
+    hm_cba_ci_adr_vw.cba_ci_adr_city AS cba_ci_adr_city,
+    hm_cba_ci_adr_vw.cba_ci_adr_state AS cba_ci_adr_state,
+    hm_cba_ci_xref_vw.cba_ci_xref_f2 AS cba_ci_xref_f2,
+    hm_cba_ci_xref_vw.cba_ci_xref_f3 AS cba_ci_xref_f3
+  FROM hm_cba_ci_adr_vw
+  LEFT OUTER JOIN hm_cba_ci_xref_vw ON hm_cba_ci_adr_vw.cba_ci_adr_userid = hm_cba_ci_xref_vw.cba_ci_xref_userid;
+  
+  INSERT INTO hm_cba_ci_quarantine (cba_ci_user_id, what)
+  SELECT
+    hm_cba_ci_adr_vw.cba_ci_adr_userid AS cba_ci_user_id,
+    'xref: none' AS what
+  FROM hm_cba_ci_adr_vw
+  LEFT OUTER JOIN hm_cba_ci_xref_vw ON hm_cba_ci_adr_vw.cba_ci_adr_userid = hm_cba_ci_xref_vw.cba_ci_xref_userid
+  WHERE hm_cba_ci_xref_vw.cba_ci_xref_userid IS NULL
+  UNION ALL
+  SELECT
+    hm_cba_ci_xref_vw.cba_ci_xref_userid AS cba_ci_user_id,
+    'adr: none' AS what
+  FROM hm_cba_ci_xref_vw
+  LEFT OUTER JOIN hm_cba_ci_adr_vw ON hm_cba_ci_xref_vw.cba_ci_xref_userid = hm_cba_ci_adr_vw.cba_ci_adr_userid
+  WHERE hm_cba_ci_adr_vw.cba_ci_adr_userid IS NULL;
+  end;

@@ -1,0 +1,30 @@
+SQL queries: |
+  
+  create view hm_cba_ci_vw (cba_ci_userid, cba_ci_name, cba_ci_createdon, cba_ci_modifiedon) as
+  select
+    json_value(cast(val as string), '$.cba_ci_userid'),
+    json_value(cast(val as string), '$.cba_ci_name'),
+    json_value(cast(val as string), '$.cba_ci_createdon'),
+    json_value(cast(val as string), '$.cba_ci_modifiedon')
+  from hm_db
+  where
+    json_value(cast(val as string), '$.tbl') = 'cba_ci';
+  
+  create view hm_cba_ci_xref_vw (cba_ci_xref_userid, cba_ci_xref_f2, cba_ci_xref_f3) as
+  select
+    json_value(cast(val as string), '$.cba_ci_xref_userid'),
+    json_value(cast(val as string), '$.cba_ci_xref_f2'),
+    json_value(cast(val as string), '$.cba_ci_xref_f3')
+  from hm_db
+  where
+    json_value(cast(val as string), '$.tbl') = 'cba_ci_xref';
+  
+  create view hm_cba_ci_adr_vw (cba_ci_adr_userid, cba_ci_adr_line, cba_ci_adr_city, cba_ci_adr_state) as
+  select
+    json_value(cast(val as string), '$.cba_ci_adr_userid'),
+    json_value(cast(val as string), '$.cba_ci_adr_line'),
+    json_value(cast(val as string), '$.cba_ci_adr_city'),
+    json_value(cast(val as string), '$.cba_ci_adr_state')
+  from hm_db
+  where
+    json_value(cast(val as string), '$.tbl') = 'cba_ci_adr';

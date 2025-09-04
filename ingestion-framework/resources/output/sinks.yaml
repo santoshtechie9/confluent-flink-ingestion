@@ -1,0 +1,45 @@
+SQL queries: |
+  
+  drop table if exists hm_cba_ci;
+  create table hm_cba_ci (
+    cba_ci_userid string,
+    cba_ci_name string,
+    cba_ci_createdon date,
+    cba_ci_modifiedon timestamp_ltz(3)
+  )
+  with ('value.format'='avro-registry');
+  
+  drop table if exists hm_cba_ci_xref;
+  create table hm_cba_ci_xref (
+    cba_ci_xref_userid string,
+    cba_ci_xref_f2 string,
+    cba_ci_xref_f3 string
+  )
+  with ('value.format'='avro-registry');
+  
+  drop table if exists hm_cba_ci_adr;
+  create table hm_cba_ci_adr (
+    cba_ci_adr_userid string,
+    cba_ci_adr_line string,
+    cba_ci_adr_city string,
+    cba_ci_adr_state string
+  )
+  with ('value.format'='avro-registry');
+  
+  drop table if exists hm_cba_ci_adr_fgac;
+  create table hm_cba_ci_adr_fgac (
+    cba_ci_adr_userid string,
+    cba_ci_adr_line string,
+    cba_ci_adr_city string,
+    cba_ci_adr_state string,
+    cba_ci_xref_f2 string,
+    cba_ci_xref_f3 string
+  )
+  with ('value.format'='avro-registry');
+  
+  drop table if exists hm_cba_ci_quarantine;
+  create table hm_cba_ci_quarantine (
+    cba_ci_user_id string,
+    what string
+  )
+  with ('value.format'='avro-registry');
