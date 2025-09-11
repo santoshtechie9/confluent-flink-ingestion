@@ -1,0 +1,66 @@
+
+ Sprint Demo Script for MVP
+
+**Opening (set the stage)**
+“Today I’ll walk you through our MVP for the new streaming data ingestion platform on Confluent Cloud.
+Our goal with this MVP is simple: move from batch-oriented & NRT pipelines into a real-time, governed, and secure lakehouse architecture. 
+This enables faster insights for our business, while keeping the foundation enterprise-grade.”
+
+
+Step 1 – Ingestion (Files + CDC)
+“We focused on two common sources in this MVP:
+First, we began laying the groundwork for database Change Data Capture (CDC). This allows us to capture inserts, updates, and deletes from operational systems in near real-time. 
+Second, files in Google Cloud Storage. Instead of waiting for batches, the GCS Source Connector now streams those files into Kafka topics as soon as they land.
+
+
+**Step 2 – Flink SQL Jobs**
+“From there, we process the raw events using Flink SQL jobs.
+These jobs do two things:
+* They enrich the data — for example, tagging it with business context.
+* They standardize it — ensuring that regardless of file format or schema, the downstream view is consistent.”
+
+
+**Step 3 – Flink SQL Generator**
+“One challenge with Flink SQL is that it can get very complex. To simplify this, we built a **Flink SQL Generator**.
+This tool automatically converts our table mapping templates into ready-to-run Flink SQL.
+What used to take days of manual coding can now be done in minutes, with fewer errors and a consistent style across all pipelines.”
+
+
+**Step 4 – Iceberg Table Conversion**
+“The enriched Kafka topics are written into **Iceberg tables**.
+Why Iceberg? Because it gives us a governed, query-ready format that works for both streaming and batch analytics.
+Now, instead of digging through raw files, our users can query Iceberg tables directly in Starburst, with near real-time visibility into new data.”
+
+
+**Step 5 – Flink RBAC Design**
+“Finally, security and governance are built in.
+We implemented a **role-based access control (RBAC) design for Flink**.
+This ensures:
+
+* Developers have just enough access to build and test jobs.
+* Operators can monitor and manage jobs without touching data.
+* Service accounts are rotated and managed securely.
+
+
+**Closing (value + next steps)**
+“To summarize:
+
+* We can now ingest files in real time from GCS.
+* Enrich and transform them using auto-generated Flink SQL jobs.
+* Land them into governed Iceberg tables ready for analytics.
+* And do all of this under a secure RBAC model.
+
+This MVP lays the foundation for all future data pipelines — whether they start from databases, APIs, or files — and ensures our lakehouse grows in a secure, governed, and real-time way.
+
+
+One-Minute Script for GCS connector
+-----------------------------------
+
+“Our MVP pipeline demonstrates how we can take vendor files landing in **Google Cloud Storage** and make them immediately analytics-ready.
+
+As soon as a file arrives, the **GCS Source Connector** streams it into Kafka, eliminating delays from traditional batch processing. A **Flink SQL job** then enriches and standardizes the raw events, ensuring the data is clean, consistent, and tagged with the right business context.
+
+Finally, the **Sink Connector** writes this enriched stream into **Iceberg tables**, giving our analysts governed, query-ready data that can be accessed in near real-time using Starburst.
+
+This pipeline proves our end-to-end vision: faster access to trusted data, delivered securely and ready for analytics.”
+
