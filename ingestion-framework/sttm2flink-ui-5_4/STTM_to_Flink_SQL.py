@@ -114,7 +114,15 @@ with tabs[0]:
             st.success(f"Generated {len(items)} statements from {cur.name}.")
 
 
-    st.markdown("---")
+    st.set_page_config(menu_items={"Get Help": None, "Report a bug": None, "About": None})
+    st.markdown("""
+        <style>
+        #MainMenu {visibility: hidden;}
+        header {visibility: hidden;}   /* removes the entire top bar, including Deploy */
+        footer {visibility: hidden;}
+        </style>
+    """, unsafe_allow_html=True)
+
     results = st.session_state.results
     if not results:
         st.info("Upload and click **Generate SQL** to see statements.")
